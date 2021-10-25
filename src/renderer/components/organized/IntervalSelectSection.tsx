@@ -1,7 +1,7 @@
 import React, { useCallback, MouseEvent, useMemo } from "react";
-import { defaultIntervalOptions, Interval } from "@library/settings";
 import { useAppContext } from "@components/Context";
 import { Nullable } from "@library/global";
+import { defaultIntervalOptions, Interval } from "@library/settings/interval";
 import styled from "styled-components";
 import ReactSelect from "@components/ReactSelect";
 import useIpcListener from "@hooks/useIpcListener";
@@ -31,10 +31,10 @@ const IntervalSelectSection = ({ settings }: Props): JSX.Element => {
     return <>{settings.title}</>;
   }, [settings]);
 
-  const onResponse = useCallback(
-    (event: Event, value: Interval) => {
+  const onOptionChange = useCallback(
+    (event: Event, interval: Interval) => {
       setSettings((prev) => {
-        return { ...prev, interval: value };
+        return { ...prev, interval };
       });
     },
     [setSettings]
@@ -44,17 +44,22 @@ const IntervalSelectSection = ({ settings }: Props): JSX.Element => {
     (e: MouseEvent<HTMLButtonElement>) => {
       e.preventDefault();
 
-      electronOnly.showIntervalOptionsDropdown({
-        options,
-        selectedValue,
+      electronOnly.showIntervalOptions({
+        options: options.map((option) => {
+          return {
+            title: option.title,
+            value: option.value,
+            checked: option.value === selectedValue,
+          };
+        }),
       });
     },
     [options, selectedValue]
   );
 
   useIpcListener({
-    channel: "interval-options-dropdown-response",
-    listener: onResponse,
+    channel: "request-change-interval-option",
+    listener: onOptionChange,
   });
 
   return (
@@ -69,8 +74,7 @@ const Section = styled.section`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-top: 8px;
-  padding-bottom: 8px;
+  padding: 8px 12px;
 `;
 
 const Title = styled.h3`

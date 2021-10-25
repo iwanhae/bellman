@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, shell, Menu } from "electron";
+import { app, BrowserWindow, ipcMain, shell, Menu, Tray } from "electron";
 import path from "path";
 
 // BrowserWindow Object. avoid garbage collection
@@ -26,30 +26,67 @@ const createWindow = async () => {
     await window.loadFile("index.html");
   }
 
-  // dummy handler for debug
-  ipcMain.handle("github", async () => {
-    return shell.openExternal(
-      "https://www.electronjs.org/docs/latest/tutorial/quick-start#recap"
+  // todo: 이걸로 바꾸자
+  ipcMain.on("show-dropdown-options", (event, args) => {
+    const { options, channelName } = args;
+
+    const menu = Menu.buildFromTemplate(
+      options.map(
+        (option: {
+          title: string;
+          value: number | string;
+          checked: boolean;
+        }) => {
+          return {
+            label: option.title,
+            checked: option.checked,
+            click: (): void =>
+              window?.webContents.send(channelName, {
+                title: option.title,
+                value: option.value,
+              }),
+            type: "checkbox",
+          };
+        }
+      )
     );
+
+    menu.popup();
   });
 
-  // Main handlers
-  ipcMain.on("show-interval-options-dropdown", (event, args) => {
-    const { options, selectedValue } = args;
+  ipcMain.on("show-interval-options", (event, args) => {
+    const { options } = args;
 
     const menu = Menu.buildFromTemplate([
-      ...options.map((option: { title: string; value: number }) => {
-        return {
-          label: option.title,
-          checked: option.value === selectedValue,
-          click: (): void =>
-            window?.webContents.send("interval-options-dropdown-response", {
-              title: option.title,
-              value: option.value,
-            }),
-          type: "checkbox",
-        };
-      }),
+      ...options.map(
+        (option: { title: string; value: number; checked: boolean }) => {
+          return {
+            label: option.title,
+            checked: option.checked,
+            click: (): void =>
+              window?.webContents.send("request-change-interval-option", {
+                title: option.title,
+                value: option.value,
+              }),
+            type: "checkbox",
+          };
+        }
+      ),
+    ]);
+
+    menu.popup();
+  });
+
+  ipcMain.on("show-edit-course-dropdown", (event, args) => {
+    const menu = Menu.buildFromTemplate([
+      {
+        label: "수정",
+        click: () => window?.webContents.send("show-edit-popup-response"),
+      },
+      {
+        label: "삭제",
+        click: () => window?.webContents.send("delete-course"),
+      },
     ]);
 
     menu.popup();

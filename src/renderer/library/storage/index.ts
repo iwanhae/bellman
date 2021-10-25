@@ -1,21 +1,20 @@
 import { Settings } from "@library/settings";
+import { Result } from "@library/types";
 
-export const settingsKey = "settings";
-
-export const saveStorage = (settings: Settings): void => {
-  const settingsFormatted = JSON.stringify(settings);
-  localStorage.setItem(settingsKey, settingsFormatted);
+export const saveStorage = (key: string, value: Settings | Result[]): void => {
+  const settingsFormatted = JSON.stringify(value);
+  localStorage.setItem(key, settingsFormatted);
 };
 
-export const loadStorage = (key: string): any => {
+export const loadStorage = (key: string) => {
   const stringifiedSettings = localStorage.getItem(key);
-
-  console.log("savedSettings:", stringifiedSettings);
 
   if (!stringifiedSettings) {
     console.error("no saved localStorage settings:", `'${key}'`);
     return {};
   }
+
+  console.log("savedSettings:", stringifiedSettings);
 
   return JSON.parse(stringifiedSettings);
 };

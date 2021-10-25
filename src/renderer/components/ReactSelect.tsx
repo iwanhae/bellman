@@ -1,26 +1,32 @@
 import React, { PropsWithChildren, MouseEvent } from "react";
-import Button from "@components/button";
+import Button, { ButtonProps } from "@components/button";
 import styled from "styled-components";
 import DropdownIcon from "@icons/DropdownIcon";
 
 type ReactSelectProps = {
   onSelect: (e: MouseEvent<HTMLButtonElement>) => void;
-};
+} & ButtonProps;
 
 const ReactSelect = ({
   onSelect,
   children,
+  ...props
 }: PropsWithChildren<ReactSelectProps>): JSX.Element => {
-  // todo: ReactSelect.tsx 에서 onSelect 를 정의하는게 좋을거같음, IntervalSelectSection이 너무 비대한듯
+  // todo: ReactSelect.tsx 에서 onSelect 를 정의하는게 좋을거같음, IntervalSelectSection 이 너무 비대한듯
   return (
-    <Button variant="white" size="md" onClick={onSelect}>
+    <ButtonSelect variant="white" size="md" {...props} onClick={onSelect}>
       <Message>{children}</Message>
       <IconWrap>
         <DropdownIcon />
       </IconWrap>
-    </Button>
+    </ButtonSelect>
   );
 };
+
+const ButtonSelect = styled(Button)`
+  justify-content: space-between;
+  min-width: 96px;
+`;
 
 const Message = styled.div`
   display: flex;

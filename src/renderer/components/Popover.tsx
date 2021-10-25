@@ -5,27 +5,32 @@ import {
   PopoverDisclosure,
   PopoverOptions,
   PopoverProps,
-  usePopoverState,
+  PopoverStateReturn,
 } from "reakit/Popover";
 import styled from "styled-components";
 
 export type PopOverProps = {
-  disclosure: ReactElement & RefAttributes<HTMLButtonElement>;
+  disclosure?: ReactElement & RefAttributes<HTMLButtonElement>;
+  usePopoverStateProps: PopoverStateReturn;
 } & Omit<PopoverProps, keyof PopoverOptions>;
 
 const Popover = ({
   disclosure,
   children,
+  usePopoverStateProps: props,
   ...restProps
 }: PopOverProps): JSX.Element => {
-  // todo: popover에서 usePopoverState를 갖게 하지 않도록 수정하기
-  const props = usePopoverState({ placement: "bottom-end" });
-
   return (
     <>
-      <PopoverDisclosure {...props} ref={disclosure.ref} {...disclosure.props}>
-        {(disclosureProps) => cloneElement(disclosure, disclosureProps)}
-      </PopoverDisclosure>
+      {disclosure !== undefined && (
+        <PopoverDisclosure
+          {...props}
+          ref={disclosure.ref}
+          {...disclosure.props}
+        >
+          {(disclosureProps) => cloneElement(disclosure, disclosureProps)}
+        </PopoverDisclosure>
+      )}
       <StyledPopover tabIndex={0} {...props} {...restProps}>
         <StyledPopoverArrow {...props} />
         {children}

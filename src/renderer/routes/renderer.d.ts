@@ -7,8 +7,8 @@ declare global {
 }
 
 export interface ElectronOnly {
-  github: () => Promise<void>;
-  showIntervalOptionsDropdown: (args: any) => void;
+  showIntervalOptions: (args: any) => void;
+  showDropdownOptions: (args: any) => void;
 
   addGenericIpcListener: <T>(
     channel: string,

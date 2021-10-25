@@ -1,22 +1,19 @@
 import React from "react";
 import { useAppContext } from "@components/Context";
-import styled from "styled-components";
-import IntervalSelectSection from "@components/containers/IntervalSelectSection";
+import IntervalSelectSection from "@components/organized/IntervalSelectSection";
+import CheckboxSection from "@components/organized/CheckboxSection";
+import CourseDetailSection from "@components/organized/CourseDetailSection";
 
 const SettingsRoute = (): JSX.Element => {
   const { settings } = useAppContext();
 
   return (
-    <Wrap>
+    <>
       <IntervalSelectSection settings={settings.interval} />
-    </Wrap>
+      <CheckboxSection settings={settings.playSound} />
+      <CourseDetailSection courses={settings.courses} />
+    </>
   );
 };
-
-const Wrap = styled.article`
-  display: flex;
-  flex-direction: column;
-  padding: 0 12px;
-`;
 
 export default SettingsRoute;

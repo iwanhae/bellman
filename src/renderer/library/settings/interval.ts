@@ -1,11 +1,3 @@
-import { Nullable } from "@library/global";
-
-export interface Settings {
-  interval: Nullable<Interval>;
-  playSound: boolean;
-  courses: ExerciseCourse[];
-}
-
 export type Interval = {
   title: string;
   value: number;
@@ -53,16 +45,3 @@ export const defaultIntervalOptions: Readonly<Interval[]> = [
     value: 360,
   },
 ];
-
-export const defaultSettings: Readonly<Settings> = {
-  interval: null,
-  playSound: false,
-  courses: [],
-};
-
-export interface ExerciseCourse {
-  exerciseName: Exercise;
-  repeat: number;
-}
-
-export type Exercise = "pushup" | "yoga" | string;

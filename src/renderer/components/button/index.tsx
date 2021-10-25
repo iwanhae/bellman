@@ -39,11 +39,14 @@ const getButtonStyles = (variant: Variant) => {
         border: 1px solid ${({ theme }) => theme.border.white};
       `;
     default:
-      return css``;
+      return css`
+        padding: 0;
+        color: ${({ theme }) => theme.text.smoke};
+      `;
   }
 };
 
-type ButtonProps = Partial<BaseProps> & ReakitButtonProps;
+export type ButtonProps = Partial<BaseProps> & ReakitButtonProps;
 
 const Button = forwardRef<HTMLButtonElement, PropsWithChildren<ButtonProps>>(
   (

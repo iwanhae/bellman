@@ -35,7 +35,7 @@ const TopNavbar = (): JSX.Element => {
 
   return (
     <StyledHeader>
-      <UtilityButton onClick={changeLocation}>{buttonIcon}</UtilityButton>
+      <Button onClick={changeLocation}>{buttonIcon}</Button>
       <DateArea>
         <time>{dateFormatted}</time>
       </DateArea>
@@ -62,12 +62,6 @@ const DateArea = styled.div`
   border: 1px solid ${({ theme }) => theme.border.white};
   background-color: ${({ theme }) => theme.button.white};
   color: ${({ theme }) => theme.text.plain};
-`;
-
-const UtilityButton = styled(Button)`
-  padding: 0;
-  height: 20px;
-  line-height: 20px;
 `;
 
 export default TopNavbar;
